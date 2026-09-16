@@ -25,7 +25,7 @@ export const metadata: Metadata = {
       "Thoughtful, timeless interiors for residences, villas, offices & hospitality spaces across India. Crafted with purpose. Designed for life.",
     images: [
       {
-        url: "/assets/mklogo.png",
+        url: "https://mkdesigns.bitcoder.in/assets/mklogo.png",
         width: 1200,
         height: 630,
         alt: "MK Designs — Interior Design & Architecture Studio",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: "MK Designs — Interior Design & Architecture Studio",
     description:
       "Thoughtful, timeless interiors for residences, villas, offices & hospitality spaces across India.",
-    images: ["/assets/mklogo.png"],
+    images: ["https://mkdesigns.bitcoder.in/assets/mklogo.png"],
   },
 };
 
