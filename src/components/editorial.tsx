@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { projects, testimonials, type Project } from "@/lib/content";
+import { testimonials, type Project } from "@/lib/content";
 
 export function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
@@ -164,7 +164,7 @@ export function FinalCta() {
   );
 }
 
-export function ImageStrip() {
+export function ImageStrip({ projects }: { projects: Project[] }) {
   return (
     <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
       {projects.slice(0, 4).map((project, i) => (

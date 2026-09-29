@@ -5,6 +5,17 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  webpack: (config) => {
+    // Handle video files
+    config.module.rules.push({
+      test: /\.(mp4|webm|ogg|mov)$/,
+      type: "asset/resource",
+      generator: {
+        filename: "static/media/[name].[hash][ext]",
+      },
+    });
+    return config;
+  },
 };
 
 export default nextConfig;

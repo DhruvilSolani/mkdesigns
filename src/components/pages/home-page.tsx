@@ -10,7 +10,7 @@ import {
   SectionHeading,
   TestimonialSlider,
 } from "@/components/editorial";
-import { projects, serviceImages, services, stats } from "@/lib/content";
+import { serviceImages, services, stats, type Project } from "@/lib/content";
 
 const reasons = [
   ["Personalized Design", "Every space is designed around your lifestyle and requirements."],
@@ -21,17 +21,20 @@ const reasons = [
   ["Quality Craftsmanship", "We collaborate with skilled craftspeople and trusted vendors."],
 ];
 
-export function HomePage() {
+export function HomePage({ projects }: { projects: Project[] }) {
   return (
     <>
       {/* Hero */}
       <section className="relative h-[100svh] min-h-[600px] overflow-hidden bg-primary text-primary-foreground">
-        <img
-          src={projects[0]!.cover}
-          alt="Luxury ivory living room designed by MK Designs"
-          fetchPriority="high"
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
           className="absolute inset-0 h-full w-full scale-[1.02] object-cover"
-        />
+        >
+          <source src="/assets/hero.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-primary/45" />
         <div className="relative mx-auto flex h-full max-w-[1500px] flex-col justify-end px-5 pb-20 pt-36 lg:px-10 lg:pb-24">
           <p className="mb-5 text-xs uppercase tracking-[0.2em] text-primary-foreground/80 reveal-up">
@@ -160,7 +163,7 @@ export function HomePage() {
             light
             copy="We bring function, aesthetics, materiality, lighting, spatial planning and personal expression into one considered whole."
           />
-          <ImageStrip />
+          <ImageStrip projects={projects} />
         </div>
       </section>
 

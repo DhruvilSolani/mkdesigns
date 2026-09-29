@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SiteShell } from "@/components/site-shell";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://mkdesigns.bitcoder.in"),
@@ -58,7 +59,8 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <SiteShell>{children}</SiteShell>
+        {children}
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );

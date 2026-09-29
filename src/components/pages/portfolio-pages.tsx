@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Eyebrow, FinalCta, PageIntro, ProjectCard } from "@/components/editorial";
-import { projects, type Project } from "@/lib/content";
+import { type Project } from "@/lib/content";
 
 const filters = [
   "All",
@@ -18,7 +18,7 @@ const filters = [
   "Renovation",
 ];
 
-export function PortfolioPage() {
+export function PortfolioPage({ projects }: { projects: Project[] }) {
   const [filter, setFilter] = useState("All");
   const visible =
     filter === "All" ? projects : projects.filter((p) => p.category === filter);
@@ -74,11 +74,11 @@ export function PortfolioPage() {
   );
 }
 
-export function ProjectDetailPage({ project }: { project: Project }) {
+export function ProjectDetailPage({ project, allProjects }: { project: Project; allProjects: Project[] }) {
   const [lightbox, setLightbox] = useState<number | null>(null);
-  const index = projects.findIndex((p) => p.slug === project.slug);
-  const previous = projects[(index - 1 + projects.length) % projects.length]!;
-  const next = projects[(index + 1) % projects.length]!;
+  const index = allProjects.findIndex((p) => p.slug === project.slug);
+  const previous = allProjects[(index - 1 + allProjects.length) % allProjects.length]!;
+  const next = allProjects[(index + 1) % allProjects.length]!;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

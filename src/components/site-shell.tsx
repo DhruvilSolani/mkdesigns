@@ -39,17 +39,26 @@ export function SiteShell({ children }: { children: ReactNode }) {
       <header
         className={`fixed inset-x-0 top-0 z-40 border-b transition-all duration-500 ${
           overHero
-            ? "border-transparent bg-transparent text-primary-foreground"
-            : "border-border bg-background/95 text-foreground backdrop-blur-md"
+            ? "border-border/20 bg-white/95 text-foreground shadow-lg backdrop-blur-md"
+            : "border-border bg-white/98 text-foreground shadow-md backdrop-blur-md"
         }`}
       >
         <div className="mx-auto flex h-20 max-w-[1500px] items-center justify-between px-5 lg:px-10">
           <Link
             href="/"
             aria-label="MK Designs home"
-            className="font-display text-2xl font-medium tracking-[0.12em]"
+            className="flex items-center gap-3 font-display text-2xl font-medium tracking-[0.12em]"
           >
-            MK <span className="text-brass">DESIGNS</span>
+            <Image
+              src="/assets/mklogo.png"
+              alt="MK Designs Logo"
+              width={40}
+              height={40}
+              className="h-10 w-10 object-contain"
+            />
+            <span>
+              MK <span className="text-brass">DESIGNS</span>
+            </span>
           </Link>
 
           <nav aria-label="Main navigation" className="hidden items-center gap-7 lg:flex">
@@ -58,7 +67,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
                 key={to}
                 href={to}
                 className={`text-[11px] uppercase tracking-[0.14em] transition-opacity hover:opacity-60 ${
-                  path === to ? "text-brass" : ""
+                  path === to ? "text-brass font-semibold" : ""
                 }`}
               >
                 {label}
@@ -67,7 +76,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
           </nav>
 
           <div className="hidden lg:block">
-            <Button asChild variant={overHero ? "editorialOutline" : "editorial"} size="lg">
+            <Button asChild variant="editorial" size="lg">
               <Link href="/contact">Start Your Project</Link>
             </Button>
           </div>
