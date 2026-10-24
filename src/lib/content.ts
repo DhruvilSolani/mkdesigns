@@ -26,17 +26,17 @@ export const brand = {
 export type Project = {
   name: string;
   slug: string;
-  category: string;
-  location: string;
-  year: string;
-  client: string;
-  area: string;
-  description: string;
-  concept: string;
-  challenge: string;
-  solution: string;
+  category?: string;
+  location?: string;
+  year?: string;
+  client?: string;
+  area?: string;
+  description?: string;
+  concept?: string;
+  challenge?: string;
+  solution?: string;
   services: string[];
-  cover: string;
+  cover?: string;
   gallery: string[];
   materials: string[];
   featured: boolean;

@@ -92,12 +92,14 @@ export function ProjectDetailPage({ project, allProjects }: { project: Project; 
     <>
       {/* Hero */}
       <section className="relative h-[100svh] min-h-[600px] bg-primary text-primary-foreground">
-        <img
-          src={project.cover}
-          alt={`${project.name} by MK Designs`}
-          fetchPriority="high"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+        {project.cover && (
+          <img
+            src={project.cover}
+            alt={`${project.name} by MK Designs`}
+            fetchPriority="high"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-primary/40" />
         <div className="relative mx-auto flex h-full max-w-[1500px] flex-col justify-end px-5 pb-16 pt-40 lg:px-10 lg:pb-24">
           <nav
@@ -113,97 +115,111 @@ export function ProjectDetailPage({ project, allProjects }: { project: Project; 
           <h1 className="max-w-5xl text-balance text-6xl uppercase leading-[.9] sm:text-7xl lg:text-9xl">
             {project.name}
           </h1>
-          <p className="mt-7 text-xs uppercase tracking-[.16em]">
-            {project.category} · {project.location} · {project.year}
-          </p>
+          {(project.category || project.location || project.year) && (
+            <p className="mt-7 text-xs uppercase tracking-[.16em]">
+              {[project.category, project.location, project.year].filter(Boolean).join(" · ")}
+            </p>
+          )}
         </div>
       </section>
 
       {/* Project overview */}
-      <section className="px-5 py-24 lg:px-10 lg:py-36">
-        <div className="mx-auto grid max-w-[1300px] gap-16 lg:grid-cols-[.65fr_1.35fr]">
-          <div>
-            <Eyebrow>Project overview</Eyebrow>
-            <dl className="divide-y divide-border border-y border-border text-sm">
-              {(
-                [
-                  ["Client", project.client],
-                  ["Area", project.area],
-                  ["Year", project.year],
-                  ["Services", project.services.join(", ")],
-                ] as const
-              ).map(([dt, dd]) => (
-                <div key={dt} className="grid grid-cols-3 py-4">
-                  <dt className="text-muted-foreground">{dt}</dt>
-                  <dd className="col-span-2">{dd}</dd>
-                </div>
-              ))}
-            </dl>
+      {(project.client || project.area || project.year || project.services.length > 0 || project.description) && (
+        <section className="px-5 py-24 lg:px-10 lg:py-36">
+          <div className="mx-auto grid max-w-[1300px] gap-16 lg:grid-cols-[.65fr_1.35fr]">
+            {(project.client || project.area || project.year || project.services.length > 0) && (
+              <div>
+                <Eyebrow>Project overview</Eyebrow>
+                <dl className="divide-y divide-border border-y border-border text-sm">
+                  {[
+                    ["Client", project.client],
+                    ["Area", project.area],
+                    ["Year", project.year],
+                    ["Services", project.services.length > 0 ? project.services.join(", ") : null],
+                  ]
+                    .filter(([, value]) => value)
+                    .map(([dt, dd]) => (
+                      <div key={dt} className="grid grid-cols-3 py-4">
+                        <dt className="text-muted-foreground">{dt}</dt>
+                        <dd className="col-span-2">{dd}</dd>
+                      </div>
+                    ))}
+                </dl>
+              </div>
+            )}
+            {project.description && (
+              <div>
+                <p className="font-display text-4xl leading-tight sm:text-5xl">
+                  {project.description}
+                </p>
+              </div>
+            )}
           </div>
-          <div>
-            <p className="font-display text-4xl leading-tight sm:text-5xl">
-              {project.description}
-            </p>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Concept / Challenge / Solution */}
-      <section className="bg-ivory-deep px-5 py-24 lg:px-10 lg:py-32">
-        <div className="mx-auto grid max-w-[1300px] gap-14 md:grid-cols-3">
-          {(
-            [
+      {(project.concept || project.challenge || project.solution) && (
+        <section className="bg-ivory-deep px-5 py-24 lg:px-10 lg:py-32">
+          <div className="mx-auto grid max-w-[1300px] gap-14 md:grid-cols-3">
+            {[
               ["Design Concept", project.concept],
               ["The Challenge", project.challenge],
               ["Our Solution", project.solution],
-            ] as const
-          ).map(([title, copy]) => (
-            <article key={title}>
-              <h2 className="text-4xl">{title}</h2>
-              <p className="mt-6 text-sm leading-7 text-muted-foreground">{copy}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+            ]
+              .filter(([, copy]) => copy)
+              .map(([title, copy]) => (
+                <article key={title}>
+                  <h2 className="text-4xl">{title}</h2>
+                  <p className="mt-6 text-sm leading-7 text-muted-foreground">{copy}</p>
+                </article>
+              ))}
+          </div>
+        </section>
+      )}
 
       {/* Materials */}
-      <section className="px-5 py-24 lg:px-10 lg:py-32">
-        <div className="mx-auto max-w-[1500px]">
-          <Eyebrow>Materials &amp; finishes</Eyebrow>
-          <div className="grid grid-cols-2 border-l border-t border-border md:grid-cols-3 lg:grid-cols-6">
-            {project.materials.map((material, i) => (
-              <div key={material} className="aspect-square border-b border-r border-border p-5">
-                <span className="text-xs text-brass">0{i + 1}</span>
-                <p className="mt-12 font-display text-2xl">{material}</p>
-              </div>
-            ))}
+      {project.materials.length > 0 && (
+        <section className="px-5 py-24 lg:px-10 lg:py-32">
+          <div className="mx-auto max-w-[1500px]">
+            <Eyebrow>Materials &amp; finishes</Eyebrow>
+            <div className="grid grid-cols-2 border-l border-t border-border md:grid-cols-3 lg:grid-cols-6">
+              {project.materials.map((material, i) => (
+                <div key={material} className="aspect-square border-b border-r border-border p-5">
+                  <span className="text-xs text-brass">0{i + 1}</span>
+                  <p className="mt-12 font-display text-2xl">{material}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Gallery */}
-      <section className="pb-24 lg:pb-36">
-        <div className="grid gap-2 md:grid-cols-2">
-          {project.gallery.map((image, i) => (
-            <button
-              key={`${image}-${i}`}
-              type="button"
-              aria-label={`Open ${project.name} gallery image ${i + 1}`}
-              onClick={() => setLightbox(i)}
-              className={`${
-                i === 0 || i === 3 ? "md:col-span-2 aspect-[16/8]" : "aspect-[4/5]"
-              } overflow-hidden bg-muted`}
-            >
-              <img
-                src={image}
-                alt={`${project.name} detail ${i + 1}`}
-                loading="lazy"
-                className="h-full w-full object-cover image-zoom"
-              />
-            </button>
-          ))}
-        </div>
-      </section>
+      {project.gallery.length > 0 && (
+        <section className="pb-24 lg:pb-36">
+          <div className="grid gap-2 md:grid-cols-2">
+            {project.gallery.map((image, i) => (
+              <button
+                key={`${image}-${i}`}
+                type="button"
+                aria-label={`Open ${project.name} gallery image ${i + 1}`}
+                onClick={() => setLightbox(i)}
+                className={`${
+                  i === 0 || i === 3 ? "md:col-span-2 aspect-[16/8]" : "aspect-[4/5]"
+                } overflow-hidden bg-muted`}
+              >
+                <img
+                  src={image}
+                  alt={`${project.name} detail ${i + 1}`}
+                  loading="lazy"
+                  className="h-full w-full object-cover image-zoom"
+                />
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Prev / Next */}
       <nav className="grid border-y border-border md:grid-cols-2">

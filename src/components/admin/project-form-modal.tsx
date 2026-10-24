@@ -128,21 +128,14 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
     // Clean empty array values
     const cleanedGallery = form.gallery.filter(Boolean);
     
-    // Use first gallery image as cover
+    // Use first gallery image as cover if available
     const cleaned: AdminProject = {
       ...form,
       services: form.services.filter(Boolean),
       gallery: cleanedGallery,
       materials: form.materials.filter(Boolean),
-      cover: cleanedGallery[0] || "", // Auto-set cover from first gallery image
+      cover: cleanedGallery[0] || form.cover || "", // Auto-set cover from first gallery image or keep existing
     };
-
-    // Validate gallery has at least one image
-    if (cleanedGallery.length === 0) {
-      setError("Please add at least one gallery image");
-      setSaving(false);
-      return;
-    }
 
     try {
       await onSave(cleaned);
@@ -208,13 +201,13 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
           {/* Row: Category + Location */}
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className={labelCls}>Category *</label>
+              <label className={labelCls}>Category</label>
               <select
                 className={inputCls}
-                required
                 value={form.category}
                 onChange={(e) => set("category", e.target.value)}
               >
+                <option value="" className="bg-[#1a1a1a]">Not specified</option>
                 {CATEGORIES.map((c) => (
                   <option key={c} value={c} className="bg-[#1a1a1a]">
                     {c}
@@ -223,10 +216,9 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
               </select>
             </div>
             <div>
-              <label className={labelCls}>Location *</label>
+              <label className={labelCls}>Location</label>
               <input
                 className={inputCls}
-                required
                 value={form.location}
                 onChange={(e) => set("location", e.target.value)}
                 placeholder="Rajkot, Gujarat"
@@ -237,30 +229,27 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
           {/* Row: Year + Client + Area */}
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
-              <label className={labelCls}>Year *</label>
+              <label className={labelCls}>Year</label>
               <input
                 className={inputCls}
-                required
                 value={form.year}
                 onChange={(e) => set("year", e.target.value)}
                 placeholder="2025"
               />
             </div>
             <div>
-              <label className={labelCls}>Client *</label>
+              <label className={labelCls}>Client</label>
               <input
                 className={inputCls}
-                required
                 value={form.client}
                 onChange={(e) => set("client", e.target.value)}
                 placeholder="Private Residence"
               />
             </div>
             <div>
-              <label className={labelCls}>Area *</label>
+              <label className={labelCls}>Area</label>
               <input
                 className={inputCls}
-                required
                 value={form.area}
                 onChange={(e) => set("area", e.target.value)}
                 placeholder="4,800 sq ft"
@@ -270,10 +259,9 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
 
           {/* Description */}
           <div>
-            <label className={labelCls}>Short Description *</label>
+            <label className={labelCls}>Short Description</label>
             <textarea
               className={`${inputCls} resize-none`}
-              required
               rows={2}
               value={form.description}
               onChange={(e) => set("description", e.target.value)}
@@ -284,10 +272,9 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
           {/* Concept / Challenge / Solution */}
           {(["concept", "challenge", "solution"] as const).map((field) => (
             <div key={field}>
-              <label className={labelCls}>{field.charAt(0).toUpperCase() + field.slice(1)} *</label>
+              <label className={labelCls}>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
               <textarea
                 className={`${inputCls} resize-none`}
-                required
                 rows={3}
                 value={form[field]}
                 onChange={(e) => set(field, e.target.value)}
@@ -338,7 +325,7 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
 
           {/* Gallery with upload buttons */}
           <div>
-            <label className={labelCls}>Gallery Images * (First image will be used as cover)</label>
+            <label className={labelCls}>Gallery Images (First image will be used as cover)</label>
             <div className="space-y-2">
               {form.gallery.map((val, i) => (
                 <div key={i} className="space-y-2">
