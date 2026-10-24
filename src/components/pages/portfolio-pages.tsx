@@ -76,47 +76,123 @@ export function PortfolioPage({ projects }: { projects: Project[] }) {
 
 export function ProjectDetailPage({ project, allProjects }: { project: Project; allProjects: Project[] }) {
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const index = allProjects.findIndex((p) => p.slug === project.slug);
   const previous = allProjects[(index - 1 + allProjects.length) % allProjects.length]!;
   const next = allProjects[(index + 1) % allProjects.length]!;
 
+  const galleryImages = project.gallery.length > 0 ? project.gallery : (project.cover ? [project.cover] : []);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setLightbox(null);
+      if (e.key === "ArrowLeft") setCurrentSlide((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+      if (e.key === "ArrowRight") setCurrentSlide((prev) => (prev + 1) % galleryImages.length);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [galleryImages.length]);
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % galleryImages.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+  };
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative h-[100svh] min-h-[600px] bg-primary text-primary-foreground">
-        {project.cover && (
-          <img
-            src={project.cover}
-            alt={`${project.name} by MK Designs`}
-            fetchPriority="high"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        )}
-        <div className="absolute inset-0 bg-primary/40" />
-        <div className="relative mx-auto flex h-full max-w-[1500px] flex-col justify-end px-5 pb-16 pt-40 lg:px-10 lg:pb-24">
+      {/* Gallery Slideshow - Moved to top */}
+      {galleryImages.length > 0 && (
+        <section className="relative bg-black pt-20">
+          {/* Slideshow Container */}
+          <div className="relative mx-auto max-w-[1800px]">
+            {/* Main Image */}
+            <div className="relative flex items-center justify-center bg-black" style={{ minHeight: '70vh', maxHeight: '85vh' }}>
+              <img
+                src={galleryImages[currentSlide]}
+                alt={`${project.name} - Image ${currentSlide + 1}`}
+                className="h-auto max-h-[85vh] w-full object-contain cursor-pointer"
+                onClick={() => setLightbox(currentSlide)}
+              />
+              
+              {/* Navigation Arrows */}
+              {galleryImages.length > 1 && (
+                <>
+                  <button
+                    onClick={prevSlide}
+                    className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white backdrop-blur-sm transition-all hover:bg-black/70 lg:left-8"
+                    aria-label="Previous image"
+                  >
+                    <ArrowLeft className="h-6 w-6" />
+                  </button>
+                  <button
+                    onClick={nextSlide}
+                    className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/50 p-3 text-white backdrop-blur-sm transition-all hover:bg-black/70 lg:right-8"
+                    aria-label="Next image"
+                  >
+                    <ArrowRight className="h-6 w-6" />
+                  </button>
+                </>
+              )}
+
+              {/* Image Counter */}
+              <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 rounded-full bg-black/50 px-4 py-2 text-sm text-white backdrop-blur-sm">
+                {currentSlide + 1} / {galleryImages.length}
+              </div>
+            </div>
+
+            {/* Thumbnail Navigation */}
+            {galleryImages.length > 1 && (
+              <div className="bg-black px-4 py-6">
+                <div className="mx-auto flex max-w-full gap-3 overflow-x-auto pb-2">
+                  {galleryImages.map((image, i) => (
+                    <button
+                      key={i}
+                      onClick={() => goToSlide(i)}
+                      className={`relative h-20 w-28 flex-shrink-0 overflow-hidden rounded-lg transition-all ${
+                        currentSlide === i
+                          ? "ring-2 ring-brass ring-offset-2 ring-offset-black"
+                          : "opacity-60 hover:opacity-100"
+                      }`}
+                    >
+                      <img
+                        src={image}
+                        alt={`Thumbnail ${i + 1}`}
+                        className="h-full w-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* Project Header - Below Gallery */}
+      <section className="bg-background px-5 py-16 lg:px-10 lg:py-20">
+        <div className="mx-auto max-w-[1500px]">
           <nav
             aria-label="Breadcrumb"
-            className="mb-8 text-xs uppercase tracking-[.15em] text-primary-foreground/70"
+            className="mb-6 text-xs uppercase tracking-[.15em] text-muted-foreground"
           >
-            <Link href="/">Home</Link>
+            <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/portfolio">Portfolio</Link>
+            <Link href="/portfolio" className="hover:text-foreground transition-colors">Portfolio</Link>
             <span className="mx-2">/</span>
-            {project.name}
+            <span className="text-foreground">{project.name}</span>
           </nav>
-          <h1 className="max-w-5xl text-balance text-6xl uppercase leading-[.9] sm:text-7xl lg:text-9xl">
+          <h1 className="max-w-4xl text-balance font-display text-5xl uppercase leading-[.9] sm:text-6xl lg:text-8xl">
             {project.name}
           </h1>
           {(project.category || project.location || project.year) && (
-            <p className="mt-7 text-xs uppercase tracking-[.16em]">
+            <p className="mt-6 text-sm uppercase tracking-[.16em] text-muted-foreground">
               {[project.category, project.location, project.year].filter(Boolean).join(" · ")}
             </p>
           )}
@@ -191,32 +267,6 @@ export function ProjectDetailPage({ project, allProjects }: { project: Project; 
                 </div>
               ))}
             </div>
-          </div>
-        </section>
-      )}
-
-      {/* Gallery */}
-      {project.gallery.length > 0 && (
-        <section className="pb-24 lg:pb-36">
-          <div className="grid gap-2 md:grid-cols-2">
-            {project.gallery.map((image, i) => (
-              <button
-                key={`${image}-${i}`}
-                type="button"
-                aria-label={`Open ${project.name} gallery image ${i + 1}`}
-                onClick={() => setLightbox(i)}
-                className={`${
-                  i === 0 || i === 3 ? "md:col-span-2 aspect-[16/8]" : "aspect-[4/5]"
-                } overflow-hidden bg-muted`}
-              >
-                <img
-                  src={image}
-                  alt={`${project.name} detail ${i + 1}`}
-                  loading="lazy"
-                  className="h-full w-full object-cover image-zoom"
-                />
-              </button>
-            ))}
           </div>
         </section>
       )}

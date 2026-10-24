@@ -23,6 +23,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
   const [scrolled, setScrolled] = useState(false);
   const path = usePathname();
   const overHero = path === "/" && !scrolled;
+  const isProjectDetail = path.startsWith("/portfolio/") && path !== "/portfolio";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -144,7 +145,9 @@ export function SiteShell({ children }: { children: ReactNode }) {
       <a
         href={brand.whatsapp}
         aria-label="Contact MK Designs on WhatsApp"
-        className="fixed bottom-5 right-5 z-30 grid h-12 w-12 place-items-center rounded-full bg-olive text-primary-foreground shadow-lg transition-transform hover:scale-105"
+        className={`fixed bottom-5 right-5 z-30 grid h-12 w-12 place-items-center rounded-full bg-olive text-primary-foreground shadow-lg transition-transform hover:scale-105 ${
+          isProjectDetail ? "hidden" : ""
+        }`}
       >
         <span className="text-xs font-semibold">WA</span>
       </a>
