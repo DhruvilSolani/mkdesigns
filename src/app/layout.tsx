@@ -4,7 +4,7 @@ import { SiteShell } from "@/components/site-shell";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mkdesigns.bitcoder.in"),
+  metadataBase: new URL("https://mkdesigns.space"),
   title: {
     default: "MK Designs — Interior Design Studio",
     template: "%s — MK Designs",
@@ -19,14 +19,14 @@ export const metadata: Metadata = {
   authors: [{ name: "MK Designs" }],
   openGraph: {
     type: "website",
-    url: "https://mkdesigns.bitcoder.in",
+    url: "https://mkdesigns.space",
     siteName: "MK Designs",
     title: "MK Designs — Interior Design Studio",
     description:
       "Thoughtful, timeless interiors for residences, villas, offices & hospitality spaces across India. Crafted with purpose. Designed for life.",
     images: [
       {
-        url: "https://mkdesigns.bitcoder.in/assets/mklogo.png",
+        url: "https://mkdesigns.space/assets/mklogo.png",
         width: 1200,
         height: 630,
         alt: "MK Designs — Interior Design Studio",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     title: "MK Designs — Interior Design Studio",
     description:
       "Thoughtful, timeless interiors for residences, villas, offices & hospitality spaces across India.",
-    images: ["https://mkdesigns.bitcoder.in/assets/mklogo.png"],
+    images: ["https://mkdesigns.space/assets/mklogo.png"],
   },
 };
 

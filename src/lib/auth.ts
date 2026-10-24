@@ -6,6 +6,10 @@ import bcrypt from "bcryptjs";
 // In production, store a pre-hashed password in ADMIN_PASSWORD_HASH instead
 const getAdminHash = () => {
   const plain = process.env.ADMIN_PASSWORD ?? "";
+  if (!plain) {
+    console.error("ADMIN_PASSWORD is not set in environment variables!");
+    return "";
+  }
   return bcrypt.hashSync(plain, 10);
 };
 
@@ -23,8 +27,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (!username || !password) return null;
 
-        const validUsername = username === process.env.ADMIN_USERNAME;
-        const validPassword = await bcrypt.compare(password, getAdminHash());
+        const adminUsername = process.env.ADMIN_USERNAME;
+        const adminHash = getAdminHash();
+
+        if (!adminUsername || !adminHash) {
+          console.error("Admin credentials not configured properly");
+          return null;
+        }
+
+        const validUsername = username === adminUsername;
+        const validPassword = await bcrypt.compare(password, adminHash);
 
         if (validUsername && validPassword) {
           return { id: "1", name: "Admin", email: "admin@mkdesigns.local" };
@@ -37,6 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/admin/login",
   },
   session: { strategy: "jwt" },
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
@@ -57,4 +70,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return true; // Allow all other routes
     },
   },
+  trustHost: true, // Required for production deployment
 });
