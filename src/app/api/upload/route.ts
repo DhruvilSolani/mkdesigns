@@ -17,11 +17,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    // Validate file type
-    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    // Validate file type - Accept all common image formats
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg", 
+      "image/png",
+      "image/webp",
+      "image/gif",
+      "image/bmp",
+      "image/tiff",
+      "image/tif",
+      "image/svg+xml",
+      "image/heic",
+      "image/heif",
+      "image/avif"
+    ];
+    
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { error: "Only JPG, PNG, and WebP images are allowed" },
+        { error: "Please upload a valid image file (JPG, PNG, WebP, GIF, BMP, TIFF, SVG, HEIC, AVIF)" },
         { status: 400 }
       );
     }

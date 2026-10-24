@@ -364,7 +364,7 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
                       if (el) galleryInputRefs.current.set(i, el);
                     }}
                     type="file"
-                    accept="image/jpeg,image/jpg,image/png,image/webp"
+                    accept="image/*"
                     className="hidden"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
