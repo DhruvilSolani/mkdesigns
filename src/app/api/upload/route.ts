@@ -3,6 +3,10 @@ import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import { auth } from "@/lib/auth";
 
+// Configure API route for large file uploads (50MB)
+export const runtime = 'nodejs';
+export const maxDuration = 60; // 60 seconds timeout
+
 export async function POST(request: Request) {
   try {
     const session = await auth();
