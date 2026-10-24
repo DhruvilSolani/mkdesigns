@@ -22,10 +22,10 @@ export async function POST() {
     // Strip out Next.js image objects — store plain URL strings
     const docs = hardcoded.map((p) => ({
       ...p,
-      cover: typeof p.cover === "string" ? p.cover : (p.cover as { src: string }).src,
+      cover: typeof p.cover === "string" ? p.cover : p.cover ? (p.cover as { src: string }).src : undefined,
       gallery: p.gallery.map((g) =>
-        typeof g === "string" ? g : (g as { src: string }).src
-      ),
+        typeof g === "string" ? g : g ? (g as { src: string }).src : ""
+      ).filter(Boolean),
     }));
 
     await Project.insertMany(docs);
