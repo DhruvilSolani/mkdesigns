@@ -15,7 +15,8 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 60;
+export const revalidate = 0; // Disable caching for projects
+export const dynamic = 'force-dynamic'; // Always fetch fresh data
 
 export default async function Home() {
   let projects: ProjectType[] = [];

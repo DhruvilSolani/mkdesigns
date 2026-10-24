@@ -4,6 +4,13 @@ const nextConfig: NextConfig = {
   // Images from local assets are handled by Next.js automatically
   images: {
     formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "mkdesigns.space",
+        pathname: "/uploads/**",
+      },
+    ],
   },
   webpack: (config) => {
     // Handle video files

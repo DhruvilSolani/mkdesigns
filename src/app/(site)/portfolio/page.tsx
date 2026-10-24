@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   openGraph: { title: "Portfolio — MK Designs" },
 };
 
-export const revalidate = 60;
+export const revalidate = 0; // Disable caching for projects
+export const dynamic = 'force-dynamic'; // Always fetch fresh data
 
 export default async function Portfolio() {
   let projects: ProjectType[] = [];
