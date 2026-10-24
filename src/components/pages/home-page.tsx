@@ -38,7 +38,7 @@ export function HomePage({ projects }: { projects: Project[] }) {
         <div className="absolute inset-0 bg-primary/45" />
         <div className="relative mx-auto flex h-full max-w-[1500px] flex-col justify-end px-5 pb-20 pt-36 lg:px-10 lg:pb-24">
           <p className="mb-5 text-xs uppercase tracking-[0.2em] text-primary-foreground/80 reveal-up">
-            Interior Design &amp; Architecture
+            Interior Design
           </p>
           <h1 className="max-w-5xl text-balance text-6xl leading-[.88] reveal-up reveal-delay sm:text-7xl lg:text-9xl">
             We Design Spaces That Feel Like You.
@@ -89,13 +89,15 @@ export function HomePage({ projects }: { projects: Project[] }) {
       {/* Studio story */}
       <section className="bg-ivory-deep px-5 py-24 lg:px-10 lg:py-36">
         <div className="mx-auto grid max-w-[1500px] gap-14 lg:grid-cols-[1.1fr_.9fr] lg:items-center">
-          <div className="aspect-[4/5] overflow-hidden">
-            <img
-              src={projects[4]!.cover}
-              alt="MK Designs heritage interior"
-              loading="lazy"
-              className="h-full w-full object-cover image-zoom"
-            />
+          <div className="aspect-[4/5] overflow-hidden bg-muted">
+            {projects.length > 0 && (
+              <img
+                src={projects[Math.min(4, projects.length - 1)]?.cover || projects[0]?.cover}
+                alt="MK Designs interior showcase"
+                loading="lazy"
+                className="h-full w-full object-cover image-zoom"
+              />
+            )}
           </div>
           <div className="lg:pl-14">
             <SectionHeading

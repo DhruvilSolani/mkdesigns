@@ -37,5 +37,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/admin/login",
   },
   session: { strategy: "jwt" },
-  secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isOnAdminPanel = nextUrl.pathname.startsWith("/admin");
+      const isOnLoginPage = nextUrl.pathname === "/admin/login";
+
+      // Protect admin routes (except login page)
+      if (isOnAdminPanel && !isOnLoginPage) {
+        if (!isLoggedIn) return false; // Redirect to login
+        return true; // Allow access
+      }
+
+      // Redirect from login page if already authenticated
+      if (isOnLoginPage && isLoggedIn) {
+        return Response.redirect(new URL("/admin", nextUrl));
+      }
+
+      return true; // Allow all other routes
+    },
+  },
 });

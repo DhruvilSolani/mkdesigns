@@ -6,7 +6,7 @@ import type { Project as ProjectType } from "@/lib/content";
 import { projects as fallbackProjects } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "MK Designs — Interior Design & Architecture Studio",
+  title: "MK Designs — Interior Design Studio",
   description:
     "MK Designs creates thoughtful, timeless interiors for residences, villas, apartments, offices and hospitality spaces across India.",
   openGraph: {

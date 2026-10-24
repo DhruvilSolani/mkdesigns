@@ -41,7 +41,7 @@ const team = [
   },
   {
     name: "Studio Team",
-    title: "Design, Architecture & Project Management",
+    title: "Design & Project Management",
     description: "A close-knit team of designers, architects and project coordinators who bring each vision to life with skill and dedication.",
   },
   {
@@ -57,44 +57,55 @@ export function AboutPage() {
       <PageIntro
         eyebrow="About MK Designs"
         title="A studio built on craft, context, and care."
-        copy="We are an interior design and architecture practice based in Gujarat, India. We create spaces that are beautiful to look at and meaningful to live in."
+        copy="We are an interior design practice based in Gujarat, India. We create spaces that are beautiful to look at and meaningful to live in."
       />
 
       {/* Studio story */}
       <section className="px-5 py-24 lg:px-10 lg:py-36">
-        <div className="mx-auto grid max-w-[1500px] gap-16 lg:grid-cols-2 lg:items-center">
-          <div className="aspect-[4/5] overflow-hidden">
-            <img
-              src={projects[0]!.cover}
-              alt="MK Designs studio interior"
-              loading="lazy"
-              className="h-full w-full object-cover image-zoom"
-            />
-          </div>
-          <div className="lg:pl-10">
-            <SectionHeading
-              eyebrow="Our story"
-              title="Spaces that feel like you."
-              copy="MK Designs was founded on one belief: that great interiors are deeply personal. They are shaped by the people who inhabit them — their rituals, their memories, their sense of beauty."
-            />
-            <p className="mt-6 text-sm leading-8 text-muted-foreground">
-              Over the years, we have had the privilege of working on residences, villas, apartments,
-              offices and hospitality spaces across India. Each project has deepened our understanding of
-              how architecture and interior design can transform daily life.
-            </p>
-            <p className="mt-5 text-sm leading-8 text-muted-foreground">
-              We are a small, focused practice. That is deliberate. It means every client receives the
-              full attention of the principal designer, and every project reflects our highest standards.
-            </p>
-            <div className="mt-14 grid grid-cols-2 gap-8 border-t border-border pt-10">
-              {stats.map(([value, label]) => (
-                <div key={label}>
-                  <p className="font-display text-5xl text-brass">{value}</p>
-                  <p className="mt-2 text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                    {label}
-                  </p>
-                </div>
-              ))}
+        <div className="mx-auto max-w-[1500px]">
+          <SectionHeading
+            eyebrow="Our story"
+            title="Designing spaces. Creating experiences."
+          />
+          
+          <div className="mt-16 grid gap-16 lg:grid-cols-2 lg:items-center">
+            <div className="aspect-[4/5] overflow-hidden bg-muted">
+              <img
+                src="/assets/about.jpeg"
+                alt="MK Designs studio interior"
+                loading="lazy"
+                className="h-full w-full object-cover image-zoom"
+              />
+            </div>
+            <div className="lg:pl-10">
+              <p className="text-sm leading-8 text-muted-foreground">
+                At MK Designs, we believe that great design goes beyond aesthetics, it is about creating spaces that reflect individuality, evoke emotion, and enhance the way we live, work, and experience our surroundings.
+              </p>
+              <p className="mt-5 text-sm leading-8 text-muted-foreground">
+                Founded by Khushi Mehta, an interior and architectural designer, the studio approaches every project with a balance of creativity, functionality, and attention to detail. With a design philosophy rooted in timeless elegance and thoughtful planning, we create spaces that feel distinctive, effortless, and deeply personal.
+              </p>
+              <p className="mt-5 text-sm leading-8 text-muted-foreground">
+                From refined residences and bespoke homes to thoughtfully designed commercial spaces, every project is approached as a unique expression of its people, purpose, and context. Our process brings together architectural sensibility, carefully curated materials, considered palettes, and purposeful detailing to create environments where every element has a reason to belong.
+              </p>
+              <p className="mt-5 text-sm leading-8 text-muted-foreground">
+                With over 20 projects completed across India, our experience spans diverse spaces, design aspirations, and lifestyles. We believe that the most meaningful interiors are not simply designed to be seen, but created to be experienced — where beauty meets practicality and every detail contributes to the bigger picture.
+              </p>
+              <p className="mt-5 text-sm leading-8 text-muted-foreground">
+                At MK Designs Studio, we value collaboration, precision, and thoughtful execution. From the first concept to the final finishing touch, we strive to transform ideas into spaces that are enduring, functional, and uniquely yours.
+              </p>
+              <p className="mt-5 text-sm leading-8 text-muted-foreground">
+                Our philosophy is simple: design with intention, create with purpose, and build spaces that stand the test of time.
+              </p>
+              <div className="mt-14 grid grid-cols-2 gap-8 border-t border-border pt-10">
+                {stats.map(([value, label]) => (
+                  <div key={label}>
+                    <p className="font-display text-5xl text-brass">{value}</p>
+                    <p className="mt-2 text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                      {label}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

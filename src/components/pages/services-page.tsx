@@ -15,8 +15,8 @@ const serviceDetails = [
   },
   {
     name: "Luxury Villa Design",
-    description: "Villas demand architecture and interior design to work as one. We approach each villa as a complete composition of space, material, light and landscape.",
-    features: ["Architecture and interior integration", "Landscape coordination", "Smart home planning", "Premium material sourcing", "Art and bespoke furniture"],
+    description: "Villas demand interior design and space planning to work as one. We approach each villa as a complete composition of space, material, light and landscape.",
+    features: ["Interior design integration", "Landscape coordination", "Smart home planning", "Premium material sourcing", "Art and bespoke furniture"],
     deliverables: ["Design concept", "Full working drawings", "3D walkthroughs", "Procurement management", "Project execution"],
   },
   {
@@ -136,7 +136,7 @@ export function ServicesPage() {
           <div className="mt-16 grid gap-0 border border-primary-foreground/20 md:grid-cols-3">
             {[
               ["Apartments & Compact Homes", "₹15L – ₹40L", "2,000–4,000 sq ft, full interior design and execution"],
-              ["Large Residences & Villas", "₹40L – ₹1.5Cr+", "4,000–10,000 sq ft, architecture and interior as one"],
+              ["Large Residences & Villas", "₹40L – ₹1.5Cr+", "4,000–10,000 sq ft, complete interior design and execution"],
               ["Commercial & Hospitality", "Custom quotation", "Tailored to scope, size and brand requirements"],
             ].map(([type, range, note]) => (
               <div

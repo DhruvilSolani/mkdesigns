@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { X, Loader2, Plus, Trash2, Upload, ImageIcon } from "lucide-react";
+import { X, Loader2, Plus, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { type AdminProject } from "./admin-dashboard";
 
@@ -54,16 +54,15 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
   const [uploading, setUploading] = useState<string | null>(null);
   const [error, setError] = useState("");
 
-  const coverInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRefs = useRef<Map<number, HTMLInputElement>>(new Map());
 
   const isEdit = Boolean(project);
 
   async function handleFileUpload(
     file: File,
-    target: "cover" | { gallery: number }
+    target: { gallery: number }
   ): Promise<void> {
-    const uploadId = typeof target === "string" ? target : `gallery-${target.gallery}`;
+    const uploadId = `gallery-${target.gallery}`;
     setUploading(uploadId);
 
     try {
@@ -83,11 +82,7 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
       const { url } = await res.json();
 
       // Update form state with the uploaded URL
-      if (target === "cover") {
-        set("cover", url);
-      } else {
-        setArr("gallery", target.gallery, url);
-      }
+      setArr("gallery", target.gallery, url);
 
       toast.success("Image uploaded");
     } catch (err: unknown) {
@@ -98,12 +93,8 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
     }
   }
 
-  function triggerFileInput(type: "cover" | { gallery: number }) {
-    if (type === "cover") {
-      coverInputRef.current?.click();
-    } else {
-      galleryInputRefs.current.get(type.gallery)?.click();
-    }
+  function triggerFileInput(index: number) {
+    galleryInputRefs.current.get(index)?.click();
   }
 
   function set<K extends keyof AdminProject>(key: K, value: AdminProject[K]) {
@@ -135,12 +126,23 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
     setSaving(true);
 
     // Clean empty array values
+    const cleanedGallery = form.gallery.filter(Boolean);
+    
+    // Use first gallery image as cover
     const cleaned: AdminProject = {
       ...form,
       services: form.services.filter(Boolean),
-      gallery: form.gallery.filter(Boolean),
+      gallery: cleanedGallery,
       materials: form.materials.filter(Boolean),
+      cover: cleanedGallery[0] || "", // Auto-set cover from first gallery image
     };
+
+    // Validate gallery has at least one image
+    if (cleanedGallery.length === 0) {
+      setError("Please add at least one gallery image");
+      setSaving(false);
+      return;
+    }
 
     try {
       await onSave(cleaned);
@@ -266,54 +268,6 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
             </div>
           </div>
 
-          {/* Cover Image URL */}
-          <div>
-            <label className={labelCls}>Cover Image *</label>
-            <div className="flex gap-2">
-              <input
-                className={inputCls}
-                required
-                value={form.cover}
-                onChange={(e) => set("cover", e.target.value)}
-                placeholder="https://... or /uploads/image.jpg"
-              />
-              <button
-                type="button"
-                onClick={() => triggerFileInput("cover")}
-                disabled={uploading === "cover"}
-                className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white/70 hover:border-[#b5973a] hover:text-white transition-colors disabled:opacity-50"
-                title="Upload image"
-              >
-                {uploading === "cover" ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Upload className="h-4 w-4" />
-                )}
-              </button>
-            </div>
-            <input
-              ref={coverInputRef}
-              type="file"
-              accept="image/jpeg,image/jpg,image/png,image/webp"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) handleFileUpload(file, "cover");
-                e.target.value = "";
-              }}
-            />
-            {form.cover && (
-              <div className="relative mt-2 overflow-hidden rounded-lg">
-                <img
-                  src={form.cover}
-                  alt="Cover preview"
-                  className="h-32 w-full object-cover"
-                  onError={(e) => (e.currentTarget.style.display = "none")}
-                />
-              </div>
-            )}
-          </div>
-
           {/* Description */}
           <div>
             <label className={labelCls}>Short Description *</label>
@@ -384,7 +338,7 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
 
           {/* Gallery with upload buttons */}
           <div>
-            <label className={labelCls}>Gallery Images *</label>
+            <label className={labelCls}>Gallery Images * (First image will be used as cover)</label>
             <div className="space-y-2">
               {form.gallery.map((val, i) => (
                 <div key={i} className="space-y-2">
@@ -397,7 +351,7 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
                     />
                     <button
                       type="button"
-                      onClick={() => triggerFileInput({ gallery: i })}
+                      onClick={() => triggerFileInput(i)}
                       disabled={uploading === `gallery-${i}`}
                       className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white/70 hover:border-[#b5973a] hover:text-white transition-colors disabled:opacity-50"
                       title="Upload image"

@@ -89,13 +89,15 @@ export function ProcessPage() {
       {/* Reassurance section */}
       <section className="bg-ivory-deep px-5 py-24 lg:px-10 lg:py-36">
         <div className="mx-auto grid max-w-[1500px] gap-16 lg:grid-cols-[1fr_1fr] lg:items-center">
-          <div className="aspect-[4/5] overflow-hidden">
-            <img
-              src={projects[2]!.cover}
-              alt="MK Designs project in progress"
-              loading="lazy"
-              className="h-full w-full object-cover image-zoom"
-            />
+          <div className="aspect-[4/5] overflow-hidden bg-muted">
+            {projects.length > 2 && (
+              <img
+                src={projects[2].cover}
+                alt="MK Designs project in progress"
+                loading="lazy"
+                className="h-full w-full object-cover image-zoom"
+              />
+            )}
           </div>
           <div className="lg:pl-10">
             <SectionHeading
