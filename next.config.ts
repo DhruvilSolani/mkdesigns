@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Increase body size limit for file uploads (50MB)
+  experimental: {
+    bodySizeLimit: '50mb',
+  },
   webpack: (config) => {
     // Handle video files
     config.module.rules.push({
