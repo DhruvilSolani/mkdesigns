@@ -74,19 +74,27 @@ export function ProjectFormModal({ project, onClose, onSave }: Props) {
         body: formData,
       });
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error ?? "Upload failed");
+      // Check if response is JSON
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await res.text();
+        console.error("Non-JSON response:", text);
+        throw new Error("Server error. Please check if you're logged in and try again.");
       }
 
-      const { url } = await res.json();
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error ?? "Upload failed");
+      }
 
       // Update form state with the uploaded URL
-      setArr("gallery", target.gallery, url);
+      setArr("gallery", target.gallery, data.url);
 
       toast.success("Image uploaded");
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Upload failed";
+      console.error("Upload error:", err);
       toast.error(message);
     } finally {
       setUploading(null);
